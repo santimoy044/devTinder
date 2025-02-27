@@ -1,0 +1,19 @@
+{
+  "name": "dev-tinder",
+  "version": "1.0.0",
+  "description": "tinder for developers",
+  "main": "index.js",
+  "scripts": {
+    "dev" : "nodemon  src/app.js",
+    "start" : "npm  src/app.js"
+  },
+  "keywords": [
+    "javascript",
+    "nodejs"
+  ],
+  "author": "Santimoy Rana",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
