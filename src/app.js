@@ -5,14 +5,20 @@ const app = express();
 // app.use("/",  (req,res)=>{
 //     res.send("Hello World!");
 // } )
-app.use("/home",  (req,res)=>{
-    res.send("Hello From the dashboard!");
+// app.use("/home",  (req,res)=>{
+    
+// } )
+// app.get("/user/:id",  (req,res)=>{
+//     const id = req.params.id;
+//     res.send(`User id : ${id}`);
+// } )
+app.get("/user",  (req,res)=>{
+    const name = req.query.name ;
+    console.log(name);
+    res.send(`User name is ${name} `);
 } )
-app.use("/test",  (req,res)=>{
-    res.send("Everything is okey");
-} )
-app.use("/gateway",  (req,res)=>{
-    res.send("Gateway of India is cool");
+app.delete("/user",  (req,res)=>{
+    res.send("Deleted Successfully");
 } )
 
 
