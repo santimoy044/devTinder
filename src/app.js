@@ -23,7 +23,7 @@ connectDB().then(()=>{
 
 const User = require("./models/user.js");
 
-app.use(express.json()) ;
+app.use(express.json()) ;  
 
 
 app.post("/signup", async (req,res)=>{
@@ -79,7 +79,31 @@ app.get("/feed", async(req,res)=>{
     }
 })
 
+app.delete("/user", async (req,res)=>{
+    const userID = req.body.userID;
 
+    try{
+        const user =  await User.findByIdAndDelete(userID);
+        res.send("User deleted Successfully")
+    }
+    catch(err){
+        res.status(400).send("Something went wrong");
+    }
+})
+
+app.patch("/user",async (req,res)=>{
+    const userID = req.body.userID;
+    try{
+
+        const user = await User.findByIdAndUpdate(userID,{firstName:"Shana"},{returnDocument:"before", runValidators: true });
+        console.log(user);
+        res.send("User Updated Successfully")
+    }
+    catch(err){
+        res.status(400).send("Something went wrong");  
+    }
+
+})
 
 
 
