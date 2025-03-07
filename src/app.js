@@ -93,9 +93,10 @@ app.delete("/user", async (req,res)=>{
 
 app.patch("/user",async (req,res)=>{
     const userID = req.body.userID;
+    const data = req.body;
     try{
 
-        const user = await User.findByIdAndUpdate(userID,{firstName:"Shana"},{returnDocument:"before", runValidators: true });
+        const user = await User.findByIdAndUpdate(userID,data,{returnDocument:"before", runValidators : "true" });
         console.log(user);
         res.send("User Updated Successfully")
     }
