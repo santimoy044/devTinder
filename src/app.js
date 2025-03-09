@@ -2,6 +2,8 @@ const express = require("express");
 
 const app = express();
 
+
+
 const connectDB =require("./config/database")
 
 const {adminAuth, userAuth} = require("./middlewares/auth.js")
@@ -91,20 +93,45 @@ app.delete("/user", async (req,res)=>{
     }
 })
 
-app.patch("/user",async (req,res)=>{
-    const userID = req.body.userID;
-    const data = req.body;
-    try{
+app.patch("/user/:id", async (req, res) => {
+    try {
+        const userID = req.params.id;
+        const data = req.body;
 
-        const user = await User.findByIdAndUpdate(userID,data,{returnDocument:"before", runValidators : "true" });
-        console.log(user);
-        res.send("User Updated Successfully")
-    }
-    catch(err){
-        res.status(400).send("Something went wrong");  
-    }
+        const ALLOWED_UPDATES = [
+            "photoURL",
+            "about",
+            "gender",
+            "skills",
+            "firstName",
+            "lastName",
+            "age",
+            
+        ];
+        
+        const isUpdateAllowed = Object.keys(data).every((k) => ALLOWED_UPDATES.includes(k));
 
-})
+        if (!isUpdateAllowed) {
+            throw new Error("Update not allowed")
+        }
+
+        const user = await User.findByIdAndUpdate(
+            userID,
+            data,
+            { returnDocument: "before", runValidators: true } // Corrected options
+        );
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+         res.send("User Updated")
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Something went wrong");
+    }
+});
+
 
 
 
