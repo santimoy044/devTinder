@@ -8,6 +8,8 @@ const connectDB =require("./config/database")
 
 const {adminAuth, userAuth} = require("./middlewares/auth.js")
 
+const {validateSignupData} = require("./utils/validation")
+
 
 connectDB().then(()=>{
     console.log("Database Connection Successfull");
@@ -24,6 +26,7 @@ connectDB().then(()=>{
 
 
 const User = require("./models/user.js");
+const bcrypt = require("bcrypt");
 
 app.use(express.json()) ;  
 
@@ -32,9 +35,17 @@ app.post("/signup", async (req,res)=>{
 
    
 
-    const user = new User(req.body);
-
+    
     try{
+        validateSignupData(req);
+
+
+        const { firstName, lastName, email, passWord, gender } = req.body;
+        const passwordHash = await bcrypt.hash(passWord, 10);
+    
+
+
+        const user = new User({firstName, lastName, email, gender, passWord:passwordHash});
 
         await user.save()
         res.send("User added Successfully");

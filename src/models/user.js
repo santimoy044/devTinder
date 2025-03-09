@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
 const userSchema = new mongoose.Schema({
     firstName : {
         type: String,
@@ -17,6 +18,12 @@ const userSchema = new mongoose.Schema({
         match: /.+\@.+\..+/ , 
         lowercase : true,
         trim : true,
+        validate(value){
+
+           if(!validator.isEmail(value)) {
+            throw new Error("Invalid Email Address");
+           }
+        }
 
     },
     passWord : {
