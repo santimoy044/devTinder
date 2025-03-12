@@ -72,6 +72,8 @@ userSchema.methods.getJWT = async function () {
     return token;
 }
 
+userSchema.index({firstName : 1, lastName : 1});
+
 userSchema.methods.validatePassword = async function(passWordbyUser){
     const user = this;
     const ispasswordValid = await bcrypt.compare(passWordbyUser,user.passWord);
@@ -82,3 +84,4 @@ userSchema.methods.validatePassword = async function(passWordbyUser){
 
 module.exports = mongoose.model("User", userSchema);
 
+// Doing this for the first time

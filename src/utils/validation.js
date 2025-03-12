@@ -23,3 +23,4 @@ const validateUpdateFields = (req) => {
     const isupdateAllowed = Object.keys(req.body).every((field) => allowedFields.includes(field));
 }
 module.exports = {validateSignupData, validateUpdateFields};
+

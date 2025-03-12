@@ -2,8 +2,6 @@ const express = require("express");
 
 const app = express();
 
-
-
 const connectDB =require("./config/database")
 
 const {validateSignupData} = require("./utils/validation")
@@ -22,36 +20,29 @@ const {authRouter} = require("./routes/auth");
 
 const {profileRouter} = require("./routes/profile");
 
+const requestRouter = require("./routes/request");
 
 
 
-connectDB().then(()=>{
-    console.log("Database Connection Successfull");
+connectDB().then(() => {
+    console.log("Database Connection Successful");
     
     app.listen(7777, () => {
         console.log("Server is running on port 7777");
     });
-
-}).catch(err =>{
+}).catch(err => {
     console.log("Database Connection failed");
-}
+});
 
-)
-
-
-app.use(express.json()) ;  
+// Move these BEFORE connecting to database
+app.use(express.json());
 app.use(cookieParser());
-
-
 app.use("/", authRouter);
-app.use("/", profileRouter);
-
-
-
+app.use("/", requestRouter);
 app.get("/profile", userAuth, async (req,res)=>{
-
+    
     try{
-
+        
         const user = req.user;
         res.send(user);
     }
