@@ -15,7 +15,7 @@ const connectionRequestSchema = new mongoose.Schema({
         type : String,
         required : true,
         enum : {
-            values : ["ignored", "accepted", "rejected", "intrested"],
+            values : ["ignored", "accepted", "rejected", "interested"],
             message : `{VALUE} is not a valid status`,
         }
     }
@@ -34,5 +34,5 @@ connectionRequestSchema.pre("save", function (next) {
 
 
 const ConnectionRequest = mongoose.model("ConnectionRequest", connectionRequestSchema);
-module.exports = ConnectionRequest;
+module.exports = {ConnectionRequest};
 
