@@ -2,8 +2,9 @@ const express = require("express");
 const profileRouter = express.Router();
 const { userAuth } = require("../middlewares/auth");
 const User = require("../models/user");
+const bcrypt = require("bcrypt");
 
-const isupdateAllowed = require("../utils/validation");
+const {validateSignupData, validateUpdateFields} = require("../utils/validation")
 
 profileRouter.get("/profile/view", userAuth, async (req, res) => {
     try {
@@ -16,7 +17,8 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
 
 profileRouter.patch("/profile/update", userAuth, async (req, res) => {
     try {
-        if (!isupdateAllowed) {
+        const isupdateAllowed = validateUpdateFields(req);
+        if (!isupdateAllowed) { 
             throw new Error("Invalid Field");
         }
         const loggedInUser = req.user;
@@ -35,7 +37,7 @@ profileRouter.patch("/profile/update", userAuth, async (req, res) => {
 
 
 
-     catch (err) {
+    catch (err) {
         res.status(400).send("ERROR: " + err.message);
     }
 } ) ;

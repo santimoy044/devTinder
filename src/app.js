@@ -4,7 +4,7 @@ const app = express();
 
 const connectDB =require("./config/database")
 
-const {validateSignupData} = require("./utils/validation")
+const {validateSignupData, validateUpdateFields} = require("./utils/validation")
 
 const cookieParser = require("cookie-parser")
 
@@ -24,38 +24,34 @@ const {requestRouter} = require("./routes/request");
 
 const { userRouter } = require("./routes/user");
 
+const cors = require("cors");
 
+app.use(cors({ 
+    origin: "http://localhost:5173", // Allow requests from React frontend
+    credentials: true, // Allow cookies and authentication headers
+}));
 
-connectDB().then(() => {
-    console.log("Database Connection Successful");
-    
-    app.listen(7777, () => {
-        console.log("Server is running on port 7777");
-    });
-}).catch(err => {
-    console.log("Database Connection failed");
-});
-
-// Move these BEFORE connecting to database
 app.use(express.json());
 app.use(cookieParser());
+
+
 app.use("/", authRouter);
 app.use("/", requestRouter);
 
 app.use("/",userRouter);
-app.get("/profile", userAuth, async (req,res)=>{
+app.use("/", profileRouter);
+
+connectDB().then(() => {
+    console.log("Database Connection Successful");
     
-    try{
-        
-        const user = req.user;
-        res.send(user);
-    }
+    
 
-    catch(err){
-        res.status(400).send("ERROR: " + err.message);
-    }
-})
-
+    app.listen(7777, () => {
+        console.log("Server is running on port 7777");
+    });        
+}).catch(err => {
+    console.log("Database Connection failed");
+});        
 
 
 
